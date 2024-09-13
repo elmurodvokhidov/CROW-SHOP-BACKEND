@@ -1,7 +1,7 @@
 const express = require("express");
-const { createUser } = require("./userController");
+const { clerkController } = require("./userController");
 const router = express.Router()
 
-router.get('/profile', createUser);
+router.post('/clerk-webhook', clerkController);
 
 module.exports = router
