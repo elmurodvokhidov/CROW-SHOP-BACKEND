@@ -5,6 +5,7 @@ require('dotenv').config();
 
 module.exports = function (app) {
     app.use(express.json());
+    app.use(express.static('public'));
     app.use(cors());
     app.use(bodyParser.json());
 };

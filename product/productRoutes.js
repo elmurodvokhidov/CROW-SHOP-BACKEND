@@ -1,4 +1,5 @@
 const express = require("express")
+const upload = require('../config/multer.js');
 const { createProduct,
     getAllProducts,
     getProductById,
@@ -7,7 +8,7 @@ const { createProduct,
 const router = express.Router()
 
 // create a new product
-router.post('/', createProduct);
+router.post('/', upload.array('images', 10), createProduct); // до 10 файлов
 
 // getting all
 router.get('/', getAllProducts);

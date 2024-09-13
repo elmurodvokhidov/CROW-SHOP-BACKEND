@@ -36,9 +36,9 @@ const productSchema = new mongoose.Schema(
             required: true,
             min: 0, // Запас товара на складе
         },
-        // images: {
-        //     type: [String], // массив для ссылок на изображения
-        // },
+        images: {
+            type: [String], // массив для ссылок на изображения
+        },
     },
     {
         timestamps: true,
