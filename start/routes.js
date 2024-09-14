@@ -3,5 +3,5 @@ module.exports = function (app) {
     // ADMIN route shu yerga chaqiriladi...
     app.use('/api/user', require('../user/userRoutes.js'))
     app.use('/api/products', require('../product/productRoutes.js'))
-    // CATEGORY route shu yerga chaqiriladi...
+    app.use('/api/categries' , require('../category/categoryRoutes.js'))
 };
