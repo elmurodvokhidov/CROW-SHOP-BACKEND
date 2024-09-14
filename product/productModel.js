@@ -14,17 +14,18 @@ const productSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        // category: {
-        //     type: mongoose.Types.ObjectId,
-        //     ref: 'Category', // Ссылка на модель Category
-        //     required: true,
-        // },
+        category: {
+            type: mongoose.Types.ObjectId,
+            ref: 'Category',
+            required: true,
+        },
         brand: {
             type: String,
             trim: true,
         },
         size: {
-            type: [String], // Массив строк для размеров => ['S', 'M', 'L']
+            type: [String], // ['S', 'M', 'L']
+            enum: ['xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl'],
             required: true,
         },
         color: {
@@ -36,9 +37,14 @@ const productSchema = new mongoose.Schema(
             required: true,
             min: 0, // Запас товара на складе
         },
-        // images: {
-        //     type: [String], // массив для ссылок на изображения
-        // },
+        images: {
+            type: [String], // массив для ссылок на изображения
+        },
+        type: {
+            type: [String], // ['male', 'female']
+            enum: ['male', 'female', 'kid'], // allowed values
+            required: true,
+        },
     },
     {
         timestamps: true,
