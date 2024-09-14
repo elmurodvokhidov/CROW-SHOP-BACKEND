@@ -4,9 +4,9 @@ const Product = require('./productModel');
 // creating
 const createProduct = async (req, res) => {
     try {
-        const { title, description, price, brand, size, color, stock } = req.body;
+        const { title, description, price, category, brand, size, color, stock } = req.body;
 
-        if (!title || !description || !price || !brand || !size || !color || !stock) {
+        if (!title || !description || !price || !category || !brand || !size || !color || !stock) {
             return res.status(400).json({ message: "All required fields must be filled" });
         }
 
@@ -16,6 +16,7 @@ const createProduct = async (req, res) => {
             title,
             description,
             price,
+            category,
             brand,
             size,
             color,
