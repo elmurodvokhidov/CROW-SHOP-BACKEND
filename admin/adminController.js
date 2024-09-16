@@ -46,7 +46,7 @@ const signinFunc = async (req, res) => {
         if (!isMatch) return res.status(400).send("Invalid credentials");
 
         // Generate JWT token
-        const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET_KEY);
+        const token = jwt.sign({ id: admin._id }, process.env.JWT_KEY);
 
         res.status(200).json({ data: admin, token });
     } catch (error) {
@@ -75,10 +75,12 @@ const updateAdminFunc = async (req, res) => {
 };
 const getMe = async (req, res) => {
     try {
-        // req.user should be set by your authentication middleware
-        const user = req.user;
-        
-        // Make sure the user object is available
+        const id = req.authId;
+        if (!mongoose.Types.ObjectId.isValid(id)){
+            return res.status(400).send('Invalid ID')
+        }
+
+        const user = await Admin.findById(id).select('-password'); // Exclude password field
         if (!user) {
             return res.status(401).send("Not authenticated");
         }
