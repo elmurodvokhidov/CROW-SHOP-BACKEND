@@ -4,4 +4,6 @@ module.exports = function (app) {
     // USER route shu yerga chaqiriladi...
     app.use('/api/products', require('../product/productRoutes.js'))
     // CATEGORY route shu yerga chaqiriladi...
+    app.use('/api/basket', require('../basket/basket.routes.js'))
+
 };
