@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+require("dotenv").config();
 
 function authenticationAdmin(req, res, next) {
     try {

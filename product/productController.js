@@ -4,7 +4,25 @@ const Product = require('./productModel');
 // creating
 const createProduct = async (req, res) => {
     try {
-        const newProduct = await Product.create(req.body);
+        const { title, description, price, category, brand, size, color, stock } = req.body;
+
+        if (!title || !description || !price || !category || !brand || !size || !color || !stock) {
+            return res.status(400).json({ message: "All required fields must be filled" });
+        }
+
+        const imagePaths = req.files ? req.files.map(file => file.path) : [];
+        
+        const newProduct = await Product.create({
+            title,
+            description,
+            price,
+            category,
+            brand,
+            size,
+            color,
+            stock,
+            images: imagePaths
+        });
         res.status(201).json({ data: newProduct, message: "Product created successfully" });
     } catch (error) {
         res.status(500).json({ message: 'Error creating product', error });
