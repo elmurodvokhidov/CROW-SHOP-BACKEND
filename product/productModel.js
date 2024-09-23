@@ -24,8 +24,8 @@ const productSchema = new mongoose.Schema(
             trim: true,
         },
         size: {
-            type: [String], // ['S', 'M', 'L']
-            enum: ['xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl'],
+            type: [String], // ['s', 'm', 'l', 'xl', 'xxl', 'xxxl'] или ['35', '36', '37']
+            enum: ['xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45'],
             required: true,
         },
         color: {
@@ -45,6 +45,25 @@ const productSchema = new mongoose.Schema(
             enum: ['male', 'female', 'kid'], // allowed values
             required: true,
         },
+        material: {
+            type: String,
+        },
+        averageRating: { // средний рейтинг
+            type: Number,
+            default: 0,
+            min: 0,
+            max: 5,
+        },
+        numOfRatings: { // количество отзывов
+            type: Number,
+            default: 0,
+        },
+        reviews: [ // массив отзывов
+            {
+                type: mongoose.Types.ObjectId,
+                ref: 'Review',
+            },
+        ],
     },
     {
         timestamps: true,
