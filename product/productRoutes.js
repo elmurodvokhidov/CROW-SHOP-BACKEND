@@ -5,6 +5,7 @@ const { createProduct,
     getProductById,
     updateProduct,
     deleteProduct, } = require("./productController.js")
+const { getProductReviews } = require("../comments/commentController.js")
 const router = express.Router()
 
 // create a new product
@@ -21,5 +22,7 @@ router.put('/:id', updateProduct);
 
 // deleting one by id
 router.delete('/:id', deleteProduct);
+
+router.get('/:id/reviews', getProductReviews);
 
 module.exports = router

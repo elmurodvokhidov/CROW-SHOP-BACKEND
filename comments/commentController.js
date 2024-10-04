@@ -26,6 +26,28 @@ const getOneComment = async (req, res) => {
   }
 };
 
+// bitta productga tegishli hamma reviewlarni olish
+const getProductReviews = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const reviews = await Review.find({ product: id }).populate('user', 'fullname');
+
+      res.status(200).json(reviews);
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching reviews', error });
+  }
+};
+
+const calculateAverageRating = async (productId) => {
+  const reviews = await Review.find({ product: productId }); // productId mos bolgan hamma reviewlarni bitta massiv ichida qaytaradi
+  const numOfRatings = reviews.length;
+
+  if (numOfRatings > 0) {
+      const averageRating = reviews.reduce((total, review) => total + review.rating, 0) / numOfRatings;
+      
+      await Product.findByIdAndUpdate(productId, { averageRating, numOfRatings });
+  }
+};
 
 //add comment
 const addComment = async (req, res) => {
@@ -41,6 +63,7 @@ const addComment = async (req, res) => {
     });
 
     await newComment.save();
+    await calculateAverageRating(productId);
 
     res
       .status(201)
@@ -66,8 +89,17 @@ const updateComment = async(req , res) => {
 //delete comment
 const deleteComment = async (req , res) => {
   try {
-    const deleteComment = await Review.findByIdAndDelete(req.params.id)
-    if(!deleteComment) return res.status(404).send("The comment to be deleted was not found!!!")
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid review ID' });
+    }
+    
+    const deletedComment = await Review.findByIdAndDelete(id)
+    if(!deletedComment) return res.status(404).send("The comment to be deleted was not found!!!")
+    
+    await calculateAverageRating(deleteComment.product);
+
     res.status(200).send(deleteComment)
   } catch (error) {
     console.log(error.message);
@@ -78,6 +110,7 @@ const deleteComment = async (req , res) => {
 
 module.exports = {
   getAllComments,
+  getProductReviews,
   getOneComment,
   addComment,
   updateComment,
