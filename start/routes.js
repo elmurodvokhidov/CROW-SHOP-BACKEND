@@ -6,4 +6,5 @@ module.exports = function (app) {
     app.use('/api/categories' , require('../category/categoryRoutes.js'))
     app.use('/api/basket', require('../basket/basket.routes.js'))
     app.use("/api/comments" , require("../comments/commentRoute.js"))
+    app.use("/api/wishlist" , require("../wishlist/likesRoute.js"))
 };

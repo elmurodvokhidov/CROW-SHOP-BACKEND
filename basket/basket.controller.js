@@ -32,7 +32,7 @@ const addToBasket = async (req, res) => {
         const existingProductIndex = basket.products.findIndex(p => p.productId.toString() === productId);
 
         if (existingProductIndex > -1) {
-            basket.products[existingProductIndex].count = count; 
+            basket.products[existingProductIndex].count = count;
         } else {
             basket.products.push({ productId, count });
         }
