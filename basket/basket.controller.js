@@ -2,9 +2,9 @@ const Basket = require("./basket.model");
 
 const getAllBasket = async (req, res) => {
     try {
-        const authId = req.authId;
-        const basket = await Basket.findOne({ user: authId }).populate("products.productId"); 
-        
+        const { userId: authId } = req.auth;
+        const basket = await Basket.findOne({ user: authId }).populate("products.productId");
+
         if (!basket) {
             return res.status(404).json({ message: "Basket not found" });
         }
@@ -13,18 +13,20 @@ const getAllBasket = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 const addToBasket = async (req, res) => {
     try {
+        const { userId: authId } = req.auth;
         const productId = req.body.productId;
-        const count = req.body.count; 
+        const count = req.body.count;
 
         if (isNaN(count) || count < 0) {
             return res.status(400).json({ message: "Invalid count value. Must be a non-negative number." });
         }
-        const basket = await Basket.findOne({ user: req.authId });
+        const basket = await Basket.findOne({ user: authId });
 
         if (!basket) {
-            const newBasket = new Basket({ user: req.authId, products: [{ productId, count }] });
+            const newBasket = new Basket({ user: authId, products: [{ productId, count }] });
             await newBasket.save();
             return res.status(201).json(newBasket);
         }
@@ -43,11 +45,12 @@ const addToBasket = async (req, res) => {
         console.error("Error adding to basket:", error);
         res.status(500).json({ message: "Internal server error" });
     }
-}
+};
+
 const removeFromBasket = async (req, res) => {
     try {
-        const authId = req.authId;
-        const { productId, count} = req.body;
+        const { userId: authId } = req.auth;
+        const { productId, count } = req.body;
 
         const basket = await Basket.findOne({ user: authId });
         if (!basket) {
@@ -71,9 +74,10 @@ const removeFromBasket = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 const clearBasket = async (req, res) => {
     try {
-        const authId = req.authId;
+        const { userId: authId } = req.auth;
 
         const basket = await Basket.findOne({ user: authId });
 
@@ -83,7 +87,7 @@ const clearBasket = async (req, res) => {
         basket.products = [];
 
         if (basket.products.length === 0) {
-            await Basket.deleteOne({ user: authId }); 
+            await Basket.deleteOne({ user: authId });
             return res.status(200).json({ message: "Basket deleted as it was empty" });
         }
 
@@ -93,6 +97,7 @@ const clearBasket = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 module.exports = {
     getAllBasket,
     addToBasket,
