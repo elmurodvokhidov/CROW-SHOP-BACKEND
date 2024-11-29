@@ -30,7 +30,7 @@ const createOrder = async (req, res) => {
             return res.status(500).json({ message: 'Payment failed' })
         }
 
-        return res.status(201).json(newOrder)
+        return res.status(201).json(newOrder, charge)
     } catch (error) {
         return res.status(500).json({ message: error.message })
     }
@@ -97,8 +97,6 @@ const deleteOrder = async (req, res) => {
 // Handle Stripe payment
 const createPayment = async (orderId) => {
     try {
-        const {  } = req.body
-
         const order = await Order.findById(orderId)
         if (!order) {
             return res.status(404).json({ message: 'Order not found' })
